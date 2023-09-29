@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-// import { sendMail } from "./mail.service";
+import { sendMail } from "./mail.service";
 
 type MailOptions = {
   from: string;
@@ -18,10 +18,11 @@ export async function handleSendMail(req: Request, res: Response) {
   };
 
   try {
-    // await sendMail(mailOptions);
+    await sendMail(mailOptions);
 
     return res.status(StatusCodes.OK).send("Mail sent successfully");
   } catch (e: any) {
+    console.log(e);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }
