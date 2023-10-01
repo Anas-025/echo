@@ -1,28 +1,22 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { MailOptionsBody, mailOptionsSchema } from "./mail.schema";
 import { sendMail } from "./mail.service";
 
-type MailOptions = {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-};
-
-export async function handleSendMail(req: Request, res: Response) {
-  const mailOptions : MailOptions = {
-    from: "sheikhanas025@gmail.com",
-    to: "shaikhanas0025@gmail.com",
-    subject: "Hello",
-    text: "Hello world?",
-  };
+export async function handleSendMail(
+  req: Request<{}, {}, MailOptionsBody>,
+  res: Response
+) {
+  const mailOptions = req.body;
 
   try {
+    mailOptionsSchema.body.parse(mailOptions);
     await sendMail(mailOptions);
 
     return res.status(StatusCodes.OK).send("Mail sent successfully");
   } catch (e: any) {
-    console.log(e);
+    console.log("error: ", e.message);
+
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }

@@ -3,6 +3,6 @@ import { handleSendMail } from "./mail.controller";
 
 const router = express.Router();
 
-router.get("/khushi", handleSendMail);
+router.post("/khushi", handleSendMail);
 
 export default router;
